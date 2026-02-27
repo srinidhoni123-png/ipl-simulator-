@@ -1,0 +1,412 @@
+{
+  "ipl_simulator_v2": {
+    "metadata": {
+      "version": "2.0",
+      "description": "Complete IPL Cricket Simulator Rules - All 13 Phases Combined",
+      "files_included": [
+        "venues.json", "batting-shots.json", "bowling.json", 
+        "field-placements.json", "adaptive-gameplay.json", "player-ratings.json",
+        "match-setup.json", "team-entry.json", "toss-logic.json",
+        "match-approach.json", "match-engine.json", "commentary.json",
+        "scorekeeping.json", "player-dynamics.json", "user-prompts.json",
+        "innings-break.json", "match-end.json"
+      ]
+    },
+    "venues": {
+      "chennai": {
+        "full_name": "M. A. Chidambaram Stadium, Chennai",
+        "avg_first_innings": 165,
+        "avg_second_innings": 155,
+        "pitch_type": "spin_friendly",
+        "spin_effectiveness": 1.15,
+        "pace_effectiveness": 0.90,
+        "boundary_size": "large",
+        "boundary_multiplier": 0.85,
+        "dew_expected": true,
+        "dew_start_over": 12,
+        "chase_advantage": true,
+        "best_strategy": "bowl_first_night"
+      },
+      "mumbai": {
+        "full_name": "Wankhede Stadium, Mumbai",
+        "avg_first_innings": 185,
+        "avg_second_innings": 175,
+        "pitch_type": "pace_friendly",
+        "spin_effectiveness": 0.90,
+        "pace_effectiveness": 1.10,
+        "boundary_size": "small",
+        "boundary_multiplier": 1.15,
+        "dew_expected": false,
+        "chase_advantage": false,
+        "best_strategy": "bat_first"
+      },
+      "bangalore": {
+        "full_name": "M. Chinnaswamy Stadium, Bangalore",
+        "avg_first_innings": 195,
+        "avg_second_innings": 185,
+        "pitch_type": "batting_paradise",
+        "spin_effectiveness": 0.80,
+        "pace_effectiveness": 0.85,
+        "boundary_size": "very_small",
+        "boundary_multiplier": 1.25,
+        "dew_expected": true,
+        "dew_start_over": 14,
+        "chase_advantage": true,
+        "best_strategy": "chase"
+      },
+      "kolkata": {
+        "full_name": "Eden Gardens, Kolkata",
+        "avg_first_innings": 170,
+        "avg_second_innings": 165,
+        "pitch_type": "balanced",
+        "spin_effectiveness": 1.00,
+        "pace_effectiveness": 1.05,
+        "boundary_size": "large",
+        "boundary_multiplier": 0.90,
+        "dew_expected": true,
+        "dew_start_over": 13,
+        "chase_advantage": true,
+        "best_strategy": "bowl_first_dew"
+      },
+      "delhi": {
+        "full_name": "Arun Jaitley Stadium, Delhi",
+        "avg_first_innings": 165,
+        "avg_second_innings": 160,
+        "pitch_type": "slow",
+        "spin_effectiveness": 1.10,
+        "pace_effectiveness": 0.90,
+        "boundary_size": "medium",
+        "boundary_multiplier": 1.00,
+        "dew_expected": false,
+        "chase_advantage": false,
+        "best_strategy": "bat_first"
+      },
+      "ahmedabad": {
+        "full_name": "Narendra Modi Stadium, Ahmedabad",
+        "avg_first_innings": 170,
+        "avg_second_innings": 165,
+        "pitch_type": "balanced",
+        "spin_effectiveness": 1.00,
+        "pace_effectiveness": 1.05,
+        "boundary_size": "very_large",
+        "boundary_multiplier": 0.85,
+        "dew_expected": false,
+        "chase_advantage": false,
+        "best_strategy": "toss_50_50"
+      }
+    },
+    "batting_shots": {
+      "cover_drive": {
+        "when": "full_ball_outside_off",
+        "risk": "low",
+        "boundary_chance": "high_if_timed",
+        "mistake_low_rating": "edge_to_slips",
+        "execution": {
+          "high_rating": "4_runs_or_1",
+          "medium_rating": "1_2_runs",
+          "low_rating": "edge_or_beaten"
+        }
+      },
+      "straight_drive": {
+        "when": "full_ball_middle_off",
+        "risk": "very_low",
+        "boundary_chance": "medium",
+        "mistake_low_rating": "play_on_stumps",
+        "execution": {
+          "high_rating": "4_runs",
+          "medium_rating": "1_run",
+          "low_rating": "dot_or_play_on"
+        }
+      },
+      "lofted_drive": {
+        "when": "full_ball_want_six",
+        "risk": "high",
+        "boundary_chance": "very_high",
+        "mistake_low_rating": "skier_catch",
+        "execution": {
+          "high_rating": "6_runs",
+          "medium_rating": "4_or_catch_20%",
+          "low_rating": "catch_60%"
+        }
+      },
+      "scoop_ramp": {
+        "when": "full_ball_pace_fine_leg",
+        "risk": "very_high",
+        "boundary_chance": "4_6_if_connects",
+        "mistake_low_rating": "miss_bowled",
+        "execution": {
+          "high_rating": "4_6_runs",
+          "medium_rating": "4_or_catch_30%",
+          "low_rating": "miss_bowled_70%"
+        }
+      },
+      "square_cut": {
+        "when": "short_wide_outside_off",
+        "risk": "medium",
+        "boundary_chance": "high",
+        "mistake_low_rating": "inside_edge_stumps",
+        "execution": {
+          "high_rating": "4_runs",
+          "medium_rating": "1_2_runs",
+          "low_rating": "inside_edge_20%"
+        }
+      },
+      "pull_shot": {
+        "when": "short_ball_chest_high",
+        "risk": "medium_high",
+        "boundary_chance": "very_high_if_timed",
+        "mistake_low_rating": "top_edge_catch",
+        "execution": {
+          "high_rating": "6_runs",
+          "medium_rating": "4_or_top_edge_20%",
+          "low_rating": "top_edge_40%"
+        }
+      },
+      "hook_shot": {
+        "when": "bouncer_head_high",
+        "risk": "very_high",
+        "boundary_chance": "6_if_connects",
+        "mistake_low_rating": "gloved_catch",
+        "execution": {
+          "high_rating": "4_6_runs",
+          "medium_rating": "catch_40%",
+          "low_rating": "gloved_catch_60%"
+        }
+      },
+      "sweep": {
+        "when": "full_spin_on_leg",
+        "risk": "medium",
+        "boundary_chance": "4_if_gap",
+        "mistake_low_rating": "lbw_miss",
+        "execution": {
+          "high_rating": "4_runs",
+          "medium_rating": "1_2_runs",
+          "low_rating": "lbw_30%"
+        }
+      },
+      "reverse_sweep": {
+        "when": "full_spin_outside_off",
+        "risk": "very_high",
+        "boundary_chance": "4_if_connects",
+        "mistake_low_rating": "miss_bowled",
+        "execution": {
+          "high_rating": "4_runs",
+          "medium_rating": "miss_30%",
+          "low_rating": "miss_bowled_60%"
+        }
+      },
+      "forward_defense": {
+        "when": "full_ball_defend",
+        "risk": "very_low",
+        "boundary_chance": "0",
+        "mistake_low_rating": "inside_edge",
+        "execution": {
+          "high_rating": "safe_dot",
+          "medium_rating": "safe_dot",
+          "low_rating": "inside_edge_10%"
+        }
+      },
+      "flick": {
+        "when": "full_on_pads",
+        "risk": "low",
+        "boundary_chance": "good_if_timed",
+        "mistake_low_rating": "leading_edge",
+        "execution": {
+          "high_rating": "4_runs",
+          "medium_rating": "1_2_runs",
+          "low_rating": "leading_edge_15%"
+        }
+      }
+    },
+    "bowling": {
+      "variations": {
+        "yorker": {
+          "description": "Ball pitched at batter's feet",
+          "when_used": "death_overs, new_batter, need_dot",
+          "success_rate": {
+            "high_rating_90": "90% perfect, 5% low full toss, 5% half volley",
+            "medium_rating_60": "55% perfect, 25% low full toss, 20% half volley",
+            "low_rating_30": "40% perfect, 30% low full toss, 30% half volley"
+          },
+          "dumb_mistake_low_rating": "full_toss_or_wide"
+        },
+        "slower_ball": {
+          "description": "Pace variation, 10-20 km/h slower",
+          "when_used": "death_overs, set_batter, slower_ball_specialist",
+          "deception": {
+            "high_rating_90": "85% deceptive, +15% wicket, -20% boundary",
+            "medium_rating_60": "50% deceptive, +5% wicket, -5% boundary",
+            "low_rating_30": "35% deceptive, +2% wicket, 0% boundary reduction"
+          },
+          "dumb_mistake_low_rating": "telegraphs_slower, batter hits easy"
+        },
+        "bouncer": {
+          "description": "Short ball, head/chest high",
+          "when_used": "pace_bowler, batter_weak_vs_short",
+          "success_rate": {
+            "high_rating_90": "80% well directed",
+            "medium_rating_60": "50% good line",
+            "low_rating_30": "35% too high or too low"
+          },
+          "dumb_mistake_low_rating": "long_hop_easy_hit"
+        },
+        "googly": {
+          "description": "Leg spinner's wrong'un - turns opposite",
+          "when_used": "leg_spinner vs right_hander",
+          "dumb_mistake_low_rating": "bowls_stock_ball_by_mistake"
+        },
+        "doosra": {
+          "description": "Off spinner's wrong'un - turns away",
+          "when_used": "off_spinner vs right_hander",
+          "dumb_mistake_low_rating": "bowls_stock_ball_by_mistake"
+        }
+      },
+      "phase_strategies": {
+        "powerplay_overs_1_6": {
+          "pace_effectiveness": 1.10,
+          "spin_effectiveness": 0.90,
+          "strategy": "attack_with_swing, hit_the_deck",
+          "boundary_chance": "+15%"
+        },
+        "middle_overs_7_15": {
+          "pace_effectiveness": 1.00,
+          "spin_effectiveness": 1.05,
+          "strategy": "spin_from_both_ends, contain",
+          "boundary_chance": "-10%"
+        },
+        "death_overs_16_20": {
+          "pace_effectiveness": 1.15,
+          "spin_effectiveness": 0.95,
+          "strategy": "yorkers_slower_balls, wide_yorkers",
+          "boundary_chance": "+20%_sixes, +5%_wickets, +5%_wides"
+        }
+      }
+    },
+    "adaptive_gameplay": {
+      "core_rule": {
+        "boundaries": "captain_responds",
+        "singles": "no_change",
+        "twos": "no_change",
+        "sixes": "advise_bowler_variation_not_field_change"
+      },
+      "captain_response_triggers": {
+        "back_to_back_boundaries": {
+          "trigger": "2_boundaries_in_last_3_balls",
+          "action": "address_gap, adjust_field",
+          "probability": "90%"
+        },
+        "single_in_same_gap_repeatedly": {
+          "trigger": "batter_taking_singles_same_area",
+          "action": "NO_FIELD_CHANGE"
+        },
+        "six_hit": {
+          "trigger": "six_boundary",
+          "action": "advise_bowler_only: pace_variation, line_length_modification",
+          "field_change": "NO"
+        }
+      }
+    },
+    "player_ratings": {
+      "batting": {
+        "power": {"range": "1-100", "high": "+15% boundaries", "low": "-20% boundaries"},
+        "technique": {"range": "1-100", "high": "-20% wicket chance", "low": "+25% wicket chance"},
+        "strike_rotation": {"range": "1-100", "high": "40-45% singles", "low": "25-30% singles"},
+        "clutch_rating": {
+          "90_100": "Ice Cool: -10% pressure",
+          "75_89": "Clutch: -5% pressure",
+          "50_74": "Average: no effect",
+          "25_49": "Choker: +10% pressure",
+          "0_24": "Meltdown: +20% pressure"
+        }
+      },
+      "temperament": {
+        "ice_cool": "Thrives under pressure",
+        "balanced": "Handles pressure well",
+        "aggressive": "Takes game on",
+        "volatile": "Inconsistent",
+        "reckless": "Impulsive",
+        "nervous": "Struggles under pressure"
+      },
+      "bowling": {
+        "economy_control": {"range": "1-100", "high": "×0.85 runs", "low": "×1.20 runs"},
+        "wicket_taking": {"range": "1-100", "high": "×1.20 wickets", "low": "×0.75 wickets"},
+        "yorker_accuracy": {"range": "1-100", "high": "90% perfect", "low": "40% perfect"}
+      },
+      "fielding": {
+        "catching": {"range": "1-100", "high": "95% catch", "low": "60% catch"},
+        "ground_fielding": {"range": "1-100", "high": "98% stop", "low": "85% stop"},
+        "throwing_accuracy": {"range": "1-100", "high": "70% direct hit", "low": "25% direct hit"}
+      }
+    },
+    "match_engine": {
+      "ball_by_ball_flow": [
+        "display_ball_number", "bowler_selects_delivery", "batter_selects_shot",
+        "calculate_outcome", "apply_fielding", "update_stats",
+        "update_player_states", "show_commentary", "handle_strike_change", "check_over_complete"
+      ],
+      "shot_selection": "ball_based_and_intent",
+      "outcome_calculation": "very_detailed_with_all_modifiers",
+      "wicket_types": {
+        "caught": 60, "bowled": 25, "lbw": 8, "run_out": 5, "stumped": 2
+      },
+      "extras": {
+        "wide": true, "no_ball": true, "bye": true, "leg_bye": true
+      }
+    },
+    "commentary": {
+      "styles": {
+        "statistical": "Clean, minimal, data-focused",
+        "color": "Engaging, descriptive, dramatic",
+        "mixed": "Stats + brief description (recommended)",
+        "radio": "Audio-like description"
+      },
+      "tone_variations": {
+        "early_overs": "normal",
+        "death_overs": "excited_dramatic",
+        "close_chase": "tense_urgent"
+      }
+    },
+    "scorekeeping": {
+      "validation": "strict_after_every_ball",
+      "error_handling": "auto_correct_first_then_ask_user",
+      "recent_memory": "last_5_balls",
+      "bowler_quota": "max_4_overs_enforced_block",
+      "precision": {
+        "strike_rate": 1,
+        "economy": 2,
+        "run_rate": 2
+      }
+    },
+    "player_dynamics": {
+      "confidence_start": "all_50",
+      "confidence_recovery": "medium",
+      "fatigue_recovery": "innings_break_and_drinks",
+      "momentum_decay": "fast_up_and_down",
+      "pressure_triggers": ["rrr>12", "less_than_10_needed", "final_over", "playoff", "on_99"],
+      "dismissal_aftermath": "all_effects_applied"
+    },
+    "user_prompts": {
+      "after_every_over": "menu_with_options",
+      "wicket_selection": "by_name",
+      "field_changes": "custom_positions",
+      "strategic_timeout": "one_per_innings_overs_6_15",
+      "resume_method": "press_any_key"
+    },
+    "innings_break": {
+      "summary_detail": "full",
+      "impact_player_timing": "only_at_innings_break",
+      "replacement_rules": "batter_for_bowler_bowler_for_batter",
+      "ai_plan_visibility": "hidden",
+      "second_innings_start": "standard_detail"
+    },
+    "match_end": {
+      "player_of_match": "ai_intuition",
+      "margin_display": "simple",
+      "scorecard_detail": "standard",
+      "key_moments": "three",
+      "save_report": "generate_text_file",
+      "records_tracking": false,
+      "play_again": "both_options"
+    }
+  }
+}
